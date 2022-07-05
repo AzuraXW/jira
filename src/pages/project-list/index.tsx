@@ -5,9 +5,14 @@ import { cleanParams } from "../../utils";
 import qs from "qs";
 import { useMount, useDebounce } from "../../hooks";
 
+interface SearchParams {
+  name: string;
+  personId: string;
+}
+
 const apiUrl = process.env.REACT_APP_API_URL;
 function Index() {
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<SearchParams>({
     name: "",
     personId: "",
   });
@@ -15,7 +20,7 @@ function Index() {
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const debounceParams = useDebounce(params, 1000);
+  const debounceParams = useDebounce<SearchParams>(params, 1000);
   useEffect(() => {
     fetch(`${apiUrl}/projects?${qs.stringify(cleanParams(params))}`)
       .then((response) => {
