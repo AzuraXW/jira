@@ -4,13 +4,13 @@ import SearchPanel from "./searchPanel";
 import { cleanParams } from "../../utils";
 import qs from "qs";
 import { useMount, useDebounce } from "../../hooks";
+import { useHttp } from "utils/http";
 
 interface SearchParams {
   name: string;
   personId: string;
 }
 
-const apiUrl = process.env.REACT_APP_API_URL;
 function Index() {
   const [params, setParams] = useState<SearchParams>({
     name: "",
@@ -19,32 +19,21 @@ function Index() {
 
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
+  const http = useHttp();
 
   const debounceParams = useDebounce<SearchParams>(params, 1000);
   useEffect(() => {
-    fetch(`${apiUrl}/projects?${qs.stringify(cleanParams(params))}`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then((result) => {
-        setList(result);
-      });
+    http(`projects`, { data: cleanParams(debounceParams) }).then((result) => {
+      setList(result);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParams]);
 
   // 获取用户数据
   useMount(() => {
-    fetch(`${apiUrl}/users`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then((result) => {
-        setUsers(result);
-      });
+    http(`users`).then((result) => {
+      setUsers(result);
+    });
   });
 
   return (
