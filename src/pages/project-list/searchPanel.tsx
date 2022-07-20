@@ -1,3 +1,4 @@
+import { Form, Input, Select } from "antd";
 import React from "react";
 export interface User {
   id: number;
@@ -15,32 +16,36 @@ interface SearchPanelProps {
 function SearchPanel({ params, setParams, users }: SearchPanelProps) {
   return (
     <div>
-      <form action="">
-        <input
-          type="text"
-          value={params.name}
-          onChange={(event) =>
-            setParams({
-              ...params,
-              name: event.target.value,
-            })
-          }
-        />
-        <select
-          name="person"
-          onChange={(event) =>
-            setParams({
-              ...params,
-              personId: event.target.value,
-            })
-          }
-        >
-          <option value="">请选择</option>
-          {users.map((user) => (
-            <option value={user.id}>{user.name}</option>
-          ))}
-        </select>
-      </form>
+      <Form style={{ marginBottom: "26px" }} layout="inline">
+        <Form.Item>
+          <Input
+            type="text"
+            value={params.name}
+            onChange={(event) =>
+              setParams({
+                ...params,
+                name: event.target.value,
+              })
+            }
+          />
+        </Form.Item>
+        <Form.Item>
+          <Select
+            defaultValue={""}
+            onChange={(value) =>
+              setParams({
+                ...params,
+                personId: value,
+              })
+            }
+          >
+            <Select.Option value="">全部</Select.Option>
+            {users.map((user) => (
+              <Select.Option value={user.id}>{user.name}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </Form>
     </div>
   );
 }

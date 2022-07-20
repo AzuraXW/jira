@@ -5,6 +5,7 @@ import { cleanParams } from "../../utils";
 import qs from "qs";
 import { useMount, useDebounce } from "../../hooks";
 import { useHttp } from "utils/http";
+import styled from "@emotion/styled";
 
 interface SearchParams {
   name: string;
@@ -37,15 +38,19 @@ function Index() {
   });
 
   return (
-    <div>
+    <Container>
+      <h1>项目列表</h1>
       <SearchPanel
         params={params}
         setParams={setParams}
         users={users}
       ></SearchPanel>
       <List list={list} users={users}></List>
-    </div>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  padding: 26px;
+`;
 export default Index;
